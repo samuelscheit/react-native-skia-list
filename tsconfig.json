@@ -2,39 +2,28 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-skia-list": [
-        "./src/index"
-      ],
-      "react-native-gesture-handler": [
-        "./node_modules/react-native-gesture-handler"
-      ],
-      "@shopify/react-native-skia/*": [
-        "./node_modules/@shopify/react-native-skia/*"
-      ]
+      "react-native-skia-list": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": false,
+    "noImplicitReturns": true,
     "noImplicitUseStrict": false,
     "noStrictGenericChecks": false,
     "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "target": "ESNext",
     "verbatimModuleSyntax": true
-  },
-  "extends": "expo/tsconfig.base"
+  }
 }

@@ -1,0 +1,16 @@
+{
+  "cxxNamespace": ["skialist"],
+  "ios": {
+    "iosModuleName": "SkiaList"
+  },
+  "android": {
+    "androidNamespace": ["skialist"],
+    "androidCxxLibName": "skialist"
+  },
+  "autolinking": {
+    "SkiaList": {
+      "cpp": "SkiaList"
+    }
+  },
+  "ignorePaths": ["node_modules"]
+}
