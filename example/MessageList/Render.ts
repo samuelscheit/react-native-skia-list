@@ -4,6 +4,7 @@ import type { GroupProps, ImageProps, RenderNode } from "@shopify/react-native-s
 import { type MessageItem } from "./State";
 import { makeMutable, type SharedValue } from "react-native-reanimated";
 import { type ShareableState, type SkiaFlatListProps } from "react-native-skia-list";
+import { appendNode, SkiaDomApi } from "../../src/Util/DOM";
 import type { getRandomMessageData } from "./randomMessage";
 import { Platform } from "react-native";
 
@@ -193,7 +194,7 @@ export function getRenderMessageItem({
 				});
 				avatars.value[item.id] = imageNode;
 
-				element.addChild(imageNode);
+				appendNode(element, imageNode);
 			}
 		}
 
@@ -201,7 +202,8 @@ export function getRenderMessageItem({
 
 		if (displayAuthor) {
 			// author.paint(canvas, x, y - authorHeight);
-			element.addChild(
+			appendNode(
+				element,
 				SkiaDomApi.ParagraphNode({
 					paragraph: author,
 					width: maxTextWidth,
@@ -235,10 +237,11 @@ export function getRenderMessageItem({
 					rrectFull = rects[id] = { ...rrectFull, rect: { ...rrectFull.rect } };
 				}
 
-				element.addChild(SkiaDomApi.RRectNode({ rect: rrectFull, paint: bubblePaint }));
+				appendNode(element, SkiaDomApi.RRectNode({ rect: rrectFull, paint: bubblePaint }));
 			}
 
-			element.addChild(
+			appendNode(
+				element,
 				SkiaDomApi.ParagraphNode({
 					paragraph: text,
 					width: maxTextWidth,
@@ -289,7 +292,8 @@ export function getRenderMessageItem({
 				rrectFull.bottomRight = bottomRight;
 				rrectFull.topRight = topRight;
 
-				element.addChild(
+				appendNode(
+					element,
 					SkiaDomApi.ImageNode({
 						clip: Skia.Path.Make().addRRect(rrectFull),
 						image: img,
@@ -315,7 +319,8 @@ export function getRenderMessageItem({
 				if (!reaction) continue;
 				const reactionW = reaction.width;
 
-				element.addChild(
+				appendNode(
+					element,
 					SkiaDomApi.RRectNode({
 						x: reactionX,
 						y: reactionY - reactionFontSize - reactionPaddingY,
@@ -328,7 +333,8 @@ export function getRenderMessageItem({
 
 				reactionX += reactionPaddingX;
 
-				element.addChild(
+				appendNode(
+					element,
 					SkiaDomApi.ParagraphNode({
 						paragraph: reaction.paragraph,
 						width: 40,

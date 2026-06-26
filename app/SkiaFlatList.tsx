@@ -1,7 +1,7 @@
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 const { Skia } =
 	require("@shopify/react-native-skia/src/") as typeof import("@shopify/react-native-skia/lib/typescript/src/");
 import { SkiaFlatList, useSkiaFlatList } from "react-native-skia-list";
+import { appendNode, SkiaDomApi } from "../src/Util/DOM";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCallback, useMemo } from "react";
 
@@ -74,7 +74,8 @@ export default function FlatList() {
 
 			if (!element) return itemHeight;
 
-			element.addChild(
+			appendNode(
+				element,
 				SkiaDomApi.RectNode({
 					x: 0,
 					y: 0,
@@ -84,7 +85,8 @@ export default function FlatList() {
 				})
 			);
 
-			element.addChild(
+			appendNode(
+				element,
 				SkiaDomApi.ParagraphNode({
 					paragraph: item.text,
 					x: rectPadding,

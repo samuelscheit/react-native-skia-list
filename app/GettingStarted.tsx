@@ -1,7 +1,7 @@
 // needed for SkiaDomApi type
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 import { Skia } from "@shopify/react-native-skia";
 import { SkiaFlatList } from "react-native-skia-list";
+import { appendNode, SkiaDomApi } from "../src/Util/DOM";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { KeyboardProvider } from "react-native-keyboard-controller";
@@ -47,7 +47,8 @@ export default function Test() {
 						// element is a Skia.GroupNode or will be undefined if only the height of the element is needed
 						if (!element) return height;
 
-						element.addChild(
+						appendNode(
+							element,
 							// see the following link for all element types
 							// https://github.com/Shopify/react-native-skia/blob/5c38b27d72cea9c158290adb7d23c6109369ac2f/packages/skia/src/renderer/HostComponents.ts#L72-L191
 							SkiaDomApi.ParagraphNode({

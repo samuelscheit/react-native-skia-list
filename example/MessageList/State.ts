@@ -1,6 +1,7 @@
 import { makeMutable, runOnJS, runOnUI, useSharedValue } from "react-native-reanimated";
 import { useLayoutEffect, useState } from "react";
 import { interpolateClamp, useSkiaFlatList, type TapResult } from "react-native-skia-list";
+import { appendNode, setNodeProp, SkiaDomApi } from "../../src/Util/DOM";
 import { Gesture } from "react-native-gesture-handler";
 import { getContextMenu } from "./ContextMenu";
 import { getSwipeGesture } from "./Swipe";
@@ -124,8 +125,8 @@ export function useMessageListState(props: useMessageListProps & MessageListProp
 			x: 0,
 			y: 0,
 		});
-		replyIconElement.setProp("matrix", Skia.Matrix().scale(0, 0).get());
-		list.content.value.addChild(replyIconElement);
+		setNodeProp(replyIconElement, "matrix", Skia.Matrix().scale(0, 0).get());
+		appendNode(list.content.value, replyIconElement);
 
 		return replyIconElement;
 	});
@@ -147,8 +148,8 @@ export function useMessageListState(props: useMessageListProps & MessageListProp
 
 				const itemHeight = heights.value[swipeItem.value] || 0;
 
-				element.setProp("matrix", Skia.Matrix().translate(x, y).get());
-				SkiaViewApi.requestRedraw(_nativeId);
+				setNodeProp(element, "matrix", Skia.Matrix().translate(x, y).get());
+				globalThis.SkiaListViewApi?.requestRedraw(_nativeId);
 
 				const replyIconSize = interpolateClamp(value, -swipeTreshold, 0, 1, 0);
 
@@ -157,11 +158,12 @@ export function useMessageListState(props: useMessageListProps & MessageListProp
 				const replyX = spacingRight + value;
 				const replyY = y + itemHeight / 2 - replyIconSize * 15;
 
-				replyIconElement.setProp("origin", {
+				setNodeProp(replyIconElement, "origin", {
 					x: replyX,
 					y: replyY,
 				});
-				replyIconElement.setProp(
+				setNodeProp(
+					replyIconElement,
 					"matrix",
 					Skia.Matrix().scale(replyIconSize, replyIconSize).translate(replyX, replyY).get()
 				);

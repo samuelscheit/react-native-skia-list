@@ -1,4 +1,3 @@
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 import {
 	useSkiaScrollView,
 	type EdgeInsets,
@@ -10,10 +9,10 @@ import { makeMutable, cancelAnimation, withTiming, runOnUI, runOnJS, type Shared
 const { Skia } =
 	require("@shopify/react-native-skia/src/") as typeof import("@shopify/react-native-skia/lib/typescript/src/");
 import { type GroupProps, type RenderNode } from "@shopify/react-native-skia/lib/typescript/src/";
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 import type { PointProp } from "react-native";
 import { callOnUI } from "../Util/callOnUI";
 import { Gesture, HoverEffect, type GestureType } from "react-native-gesture-handler";
+import { appendNode, removeNode, setNodeProp, SkiaDomApi } from "../Util/DOM";
 
 export interface Dimensions {
 	width: number;
@@ -529,7 +528,7 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 			const element = elements.value[id];
 			if (!element) return;
 
-			content.value.removeChild(element);
+			removeNode(content.value, element);
 			delete elements.value[id];
 		}
 
@@ -553,13 +552,13 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 			if (invertedFactor === -1 && rowY > 0) {
 				offset = rowY * invertedFactor - itemHeight;
 				translation.identity().translate(safeArea.value.left, offset);
-				element.setProp("matrix", translation);
+				setNodeProp(element, "matrix", translation);
 			}
 
 			heights.value[id] = itemHeight;
 			elements.value[id] = element;
 			rowOffsets.value[id] = offset;
-			content.value.addChild(element);
+			appendNode(content.value, element);
 
 			return itemHeight;
 		}
@@ -579,7 +578,7 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 			const id = keyExtractor(item, index!);
 
 			const element = elements.value[id];
-			if (element) content.value.removeChild(element);
+			if (element) removeNode(content.value, element);
 
 			mountElement(rowOffsets.value[id], item, index, touch, hover);
 			redraw();
@@ -761,7 +760,7 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 				if (previousRowY !== actualY && previousRowY !== undefined) {
 					// element position changed
 					const translation = Skia.Matrix().translate(0, actualY).get();
-					element.setProp("matrix", translation);
+					setNodeProp(element, "matrix", translation);
 					rowOffsetsValue[id] = actualY;
 				}
 
@@ -807,9 +806,9 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 			scrollY.value = 0;
 			startY.value = 0;
 			const rootNode = root.value;
-			const children = rootNode.children();
+			const children = (rootNode as any).children as RenderNode<GroupProps>[];
 			for (const child of children) {
-				rootNode.removeChild(child);
+				removeNode(rootNode, child);
 			}
 			// root.value.removeChild(content.value);
 			// content.value = SkiaDomApi.GroupNode({});
@@ -824,7 +823,7 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 			Object.keys(elements.value).forEach((id) => {
 				const element = elements.value[id];
 				if (element) {
-					content.value.removeChild(element);
+					removeNode(content.value, element);
 				}
 				delete elements.value[id];
 			});
@@ -844,7 +843,7 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 
 			const element = elements.value[id];
 			if (element) {
-				content.value.removeChild(element);
+				removeNode(content.value, element);
 				delete elements.value[id];
 			}
 			delete transformedData.value[id];
@@ -943,7 +942,7 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 				delete idIndexMap.value[id];
 				const element = elements.value[id];
 				if (element) {
-					content.value.removeChild(element);
+					removeNode(content.value, element);
 					delete elements.value[id];
 				}
 				delete idIndexMap.value[id];
@@ -1036,7 +1035,7 @@ export function useSkiaFlatList<T, B = T>(props: SkiaFlatListProps<T, B> = {} as
 				Object.keys(elements.value).forEach((id) => {
 					const element = elements.value[id];
 					if (element) {
-						content.value.removeChild(element);
+						removeNode(content.value, element);
 					}
 					delete elements.value[id];
 				});

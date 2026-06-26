@@ -1,4 +1,3 @@
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 import type {
 	SkTextStyle,
 	RenderNode,
@@ -25,6 +24,7 @@ import { Gesture, MouseButton, type TouchData } from "react-native-gesture-handl
 import { type PointProp, PixelRatio } from "react-native";
 import React, { type ReactNode, useLayoutEffect } from "react";
 import { isInBound, useSkiaFlatList, type TapResult } from "react-native-skia-list";
+import { appendNode, removeNode, setNodeProp, SkiaDomApi } from "../../src/Util/DOM";
 import { impactAsync, ImpactFeedbackStyle } from "expo-haptics";
 import type { SkMatrix } from "@shopify/react-native-skia/lib/typescript/src/";
 import { SkiaRoot } from "../../src/Util/Reconciler";
@@ -237,7 +237,7 @@ export function getContextMenu(state: ContextMenuProps) {
 
 					if (newPaint !== previousPaint) {
 						paint.value = newPaint;
-						SkiaViewApi.requestRedraw(_nativeId);
+						globalThis.SkiaListViewApi?.requestRedraw(_nativeId);
 
 						if (newPaint === actionHighlightPaint) {
 							runOnJS(impactAsync)("light" as ImpactFeedbackStyle);
@@ -326,7 +326,7 @@ export function getContextMenu(state: ContextMenuProps) {
 
 					if (newPaint !== previousPaint) {
 						paint.value = newPaint;
-						SkiaViewApi.requestRedraw(_nativeId);
+						globalThis.SkiaListViewApi?.requestRedraw(_nativeId);
 
 						if (newPaint === actionHighlightPaint) {
 							runOnJS(impactAsync)("light" as ImpactFeedbackStyle);
@@ -440,18 +440,18 @@ export function getContextMenu(state: ContextMenuProps) {
 
 	function RenderActions(matrix: SkMatrix, tap: TapResult<MessageItem>) {
 		const root = ReactSkiaRender([Actions(tap), Emojis(tap)], () => {
-			SkiaViewApi.requestRedraw(_nativeId);
+			globalThis.SkiaListViewApi?.requestRedraw(_nativeId);
 		});
 		const result = root.dom as any;
-		list.value.addChild(result);
+		appendNode(list.value, result);
 
 		actionRoot.value = {
 			dom: result,
 			unmount: () => root.unmount(),
 		};
-		result.setProp("matrix", matrix);
+		setNodeProp(result, "matrix", matrix);
 		opacityPaint.setAlphaf(0);
-		result.setProp("layer", opacityPaint);
+		setNodeProp(result, "layer", opacityPaint);
 	}
 
 	const shareableState = {
@@ -492,8 +492,8 @@ export function getContextMenu(state: ContextMenuProps) {
 			blur: 0,
 			mode: "clamp",
 		});
-		filter.addChild(blurFilter);
-		list.value.addChild(filter);
+		appendNode(filter, blurFilter);
+		appendNode(list.value, filter);
 		backdropFilter.value = filter;
 		// item
 		const translation = Skia.Matrix().translate(0, result.absoluteY);
@@ -501,7 +501,7 @@ export function getContextMenu(state: ContextMenuProps) {
 			matrix: translation,
 		});
 		item.value = element;
-		list.value.addChild(element);
+		appendNode(list.value, element);
 
 		unmountElement(result.index, result.item);
 		const id = keyExtractor(result.item, result.index);
@@ -511,8 +511,8 @@ export function getContextMenu(state: ContextMenuProps) {
 		runOnJS(RenderActions)(translation, result);
 
 		contextMenuBlur.addListener(_nativeId, (value) => {
-			blurFilter.setProp("blur", value);
-			SkiaViewApi.requestRedraw(_nativeId);
+			setNodeProp(blurFilter, "blur", value);
+			globalThis.SkiaListViewApi?.requestRedraw(_nativeId);
 		});
 
 		function onUpdateY() {
@@ -534,10 +534,10 @@ export function getContextMenu(state: ContextMenuProps) {
 		contextMenuY.value = e.y;
 		contextMenuOpen.value = false;
 		contextMenuBlur.value = withTiming(0, { duration: 300 }, () => {
-			if (backdropFilter.value) list.value.removeChild(backdropFilter.value);
-			if (item.value) list.value.removeChild(item.value);
+			if (backdropFilter.value) removeNode(list.value, backdropFilter.value);
+			if (item.value) removeNode(list.value, item.value);
 			if (actionRoot.value) {
-				list.value.removeChild(actionRoot.value.dom);
+				removeNode(list.value, actionRoot.value.dom);
 				runOnJS(actionRoot.value.unmount)();
 			}
 

@@ -1,5 +1,4 @@
 import { type JSX } from "react";
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 const { Skia } =
 	require("@shopify/react-native-skia/src/") as typeof import("@shopify/react-native-skia/lib/typescript/src/");
 
@@ -20,6 +19,7 @@ import { Gesture } from "react-native-gesture-handler";
 import { getScrollbar } from "./Scrollbar";
 import type { ComposedGesture, GestureType } from "react-native-gesture-handler";
 import { callOnUI } from "../Util/callOnUI";
+import { appendNode, setNodeProp, SkiaDomApi } from "../Util/DOM";
 
 export interface EdgeInsets {
 	top: number;
@@ -213,7 +213,7 @@ export function useSkiaScrollView<A>(props: SkiaScrollViewProps = {} as any): Sk
 			redraw() {
 				"worklet";
 
-				SkiaViewApi.requestRedraw(_nativeId);
+				globalThis.SkiaListViewApi?.requestRedraw(_nativeId);
 			},
 			layout,
 			scrollY,
@@ -259,8 +259,6 @@ export function useSkiaScrollView<A>(props: SkiaScrollViewProps = {} as any): Sk
 			},
 		};
 
-		SkiaViewApi.setJsiProperty(_nativeId, "root", root);
-
 		const scrollState = (props.customScrollGesture || getScrollGesture)({
 			scrollY,
 			startY,
@@ -299,7 +297,7 @@ export function useSkiaScrollView<A>(props: SkiaScrollViewProps = {} as any): Sk
 
 		const gesture = customGesture({ scrollbar, ...scrollState, ...state } as any);
 
-		root.addChild(content.value);
+		appendNode(root, content.value);
 
 		runOnUI(() => {
 			"worklet";
@@ -310,7 +308,7 @@ export function useSkiaScrollView<A>(props: SkiaScrollViewProps = {} as any): Sk
 				height = invertedFactor === -1 ? value.height - safeArea.value.bottom : safeArea.value.top;
 				onScroll(scrollY.value);
 			});
-			content.value.setProp("matrix", matrix.value);
+			setNodeProp(content.value, "matrix", matrix.value);
 
 			function onScroll(value: number) {
 				const matrixValue = matrix.value;

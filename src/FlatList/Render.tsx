@@ -22,7 +22,6 @@ export type SkiaFlatListElementProps<T = any, B = T> = SkiaScrollViewElementProp
  * 
  * ```tsx
  * // needed for SkiaDomApi type
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 import { Skia } from "@shopify/react-native-skia";
 import { SkiaFlatList } from "react-native-skia-list";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

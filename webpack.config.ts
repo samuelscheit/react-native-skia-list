@@ -100,7 +100,7 @@ module.exports = async function (env, argv) {
 										"react-native-web",
 										// isDevelopment && require.resolve("react-refresh/babel"),
 										"@babel/plugin-transform-runtime",
-										"react-native-reanimated/plugin",
+										"react-native-worklets/plugin",
 									].filter(Boolean),
 								},
 							},

@@ -1,5 +1,4 @@
 import "react-native-skia-list";
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 const { Skia } =
 	require("@shopify/react-native-skia/src/") as typeof import("@shopify/react-native-skia/lib/typescript/src/");
 

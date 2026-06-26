@@ -30,7 +30,6 @@ export default function App() {
 			<Button href="/SkiaVideoList">SkiaVideoList</Button>
 			<Button href="/FlashList">FlashList</Button>
 			<Button href="/FlatList">FlatList</Button>
-			<Button href="/WGPU">WebGPU</Button>
 			<Button href="/Test">Test</Button>
 			<Button href="/GettingStarted">GettingStarted</Button>
 		</ScrollView>

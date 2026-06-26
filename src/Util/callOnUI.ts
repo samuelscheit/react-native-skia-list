@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
-const { runOnUIImmediately } =
-	require("react-native-reanimated/src/threads") as typeof import("react-native-reanimated/lib/typescript/threads");
+// const { executeOnUIRuntimeSync } =
+// 	require("react-native-worklets/src/threads") as typeof import("react-native-worklets/src/threads");
+import { runOnUI } from "react-native-reanimated";
 
 const isWeb = Platform.OS === "web";
 
@@ -16,6 +17,6 @@ export function callOnUI<Args extends unknown[], ReturnValue>(
 
 		if (_WORKLET) return worklet(...args);
 
-		return runOnUIImmediately(worklet)(...args) as any;
+		return runOnUI(worklet)(...args) as any;
 	};
 }

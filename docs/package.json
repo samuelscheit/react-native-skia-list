@@ -24,12 +24,13 @@
 		"react": "^18.0.0",
 		"react-dom": "^18.0.0",
 		"typedoc": "^0.26.10",
-		"typedoc-plugin-markdown": "https://gitpkg.vercel.app/SamuelScheit/typedoc-plugin-markdown/packages/typedoc-plugin-markdown?main"
+		"typedoc-plugin-markdown": "^4.8.1"
 	},
 	"devDependencies": {
 		"@docusaurus/module-type-aliases": "3.5.2",
 		"@docusaurus/tsconfig": "3.5.2",
 		"@docusaurus/types": "3.5.2",
+		"@types/react": "^18.3.11",
 		"autoprefixer": "^10.4.20",
 		"docusaurus-plugin-typedoc": "^1.0.5",
 		"postcss": "^8.4.47",

@@ -1,8 +1,7 @@
 import React from "react";
-import type {} from "@shopify/react-native-skia/lib/typescript/src/renderer/HostComponents";
 
 import SkiaDomViewNativeComponent from "./SkiaDomView";
-import type { NativeProps } from "@shopify/react-native-skia/lib/typescript/src/specs/SkiaDomViewNativeComponent";
+import type { NativeProps } from "./SkiaDomView";
 const { Skia, clamp } =
 	require("@shopify/react-native-skia/src/") as typeof import("@shopify/react-native-skia/lib/typescript/src/");
 
@@ -20,6 +19,7 @@ import {
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState, type ReactNode } from "react";
 import type { BaseGestureHandlerProps } from "react-native-gesture-handler/lib/typescript/handlers/gestureHandlerCommon";
 import { SkiaRoot } from "../Util/Reconciler";
+import { appendNode } from "../Util/DOM";
 
 /**
  */
@@ -157,7 +157,7 @@ export type SkiaScrollViewElementProps = {
  */
 export function SkiaScrollView(props: SkiaScrollViewElementProps) {
 	var { list, style, children, debug, fixedChildren, keyboardDismissMode, keyboardShouldPersistTaps, ...p } = props;
-	const ref = useRef<(React.Component<NativeProps, {}, any> & Readonly<NativeMethods>) | null>(null);
+	const ref = useRef<SkiaDomViewNativeComponent | null>(null);
 	const scrollViewRef = useRef<InteractiveScrollViewRef>(null);
 	var state = list!;
 	if (!state) {
@@ -216,14 +216,14 @@ export function SkiaScrollView(props: SkiaScrollViewElementProps) {
 	const [fixedReconciler] = useState(() => {
 		const reconciler = new SkiaRoot(Skia, true, state.redraw, () => _nativeId);
 
-		root.value.addChild(reconciler.dom);
+		appendNode(root.value, reconciler.dom);
 
 		return reconciler;
 	});
 	const [contentReconciler] = useState(() => {
 		const reconciler = new SkiaRoot(Skia, true, state.redraw, () => _nativeId);
 
-		content.value.addChild(reconciler.dom);
+		appendNode(content.value, reconciler.dom);
 
 		return reconciler;
 	});

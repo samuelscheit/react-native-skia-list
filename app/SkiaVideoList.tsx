@@ -10,6 +10,7 @@ import {
 	type SharedValue,
 } from "react-native-reanimated";
 import { SkiaFlatList, useSkiaFlatList } from "react-native-skia-list";
+import { appendNode, setNodeProp, SkiaDomApi } from "../src/Util/DOM";
 const { Skia } =
 	require("@shopify/react-native-skia/src/") as typeof import("@shopify/react-native-skia/lib/typescript/src/");
 
@@ -98,7 +99,7 @@ export default function SkiaVideoList() {
 
 			if (!element) return height;
 
-			element.addChild(imageNode);
+			appendNode(element, imageNode);
 
 			return height;
 		},
@@ -152,7 +153,7 @@ export default function SkiaVideoList() {
 
 		img = copyFrameOnAndroid(img);
 
-		imageNode.setProp("image", img);
+		setNodeProp(imageNode, "image", img);
 	}, true);
 
 	useEffect(() => {
