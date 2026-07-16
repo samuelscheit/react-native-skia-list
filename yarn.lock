@@ -26712,11 +26712,11 @@ __metadata:
   linkType: hard
 
 "ws@npm:^6.2.3":
-  version: 6.2.3
-  resolution: "ws@npm:6.2.3"
+  version: 6.2.5
+  resolution: "ws@npm:6.2.5"
   dependencies:
     async-limiter: "npm:~1.0.0"
-  checksum: 10c0/56a35b9799993cea7ce2260197e7879f21bbbb194a967f31acbbda6f7f46ecda4365951966fb062044c95197e19fb2f053be6f65c172435455186835f494de41
+  checksum: 10c0/41de59d1b5087886783872a57f8e3817b5f46bb1ed3a550eaecd11180b451f314094762217551311d9af71bdbfa85b1922ac9952c90806b64a9084de791546bc
   languageName: node
   linkType: hard
 
